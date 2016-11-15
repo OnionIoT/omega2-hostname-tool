@@ -1,0 +1,9 @@
+#!/bin/sh /etc/rc.common
+
+START=79
+
+BIN=/usr/bin/updateHostname
+
+boot() {
+    $BIN 
+}
