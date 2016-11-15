@@ -7,16 +7,16 @@
 # See /LICENSE for more information.
 # No Make Necessary, doing this for build root integration
 
-# SRCEXT := sh
-# SRCDIR := .
-# SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+SRCEXT := sh
+SRCDIR := .
+SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 
-# DST := $(shell echo $(SOURCES) | sed -e 's/\.$(SRCEXT)//')
+DST := $(shell echo $(SOURCES) | sed -e 's/\.$(SRCEXT)//')
 
-# all: copy
+all: copy
 
-# copy:
-# 	@echo $(SOURCES)
+copy:
+	@echo $(SOURCES)
 
-# clean:
-# 	@rm -rf $(DST)
+clean:
+	@rm -rf $(DST)
