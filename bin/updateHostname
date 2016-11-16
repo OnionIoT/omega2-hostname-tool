@@ -1,6 +1,6 @@
 #!/bin/sh
-# This is a comment!
-#
+
+
 nullHostName="Omega-0000"
 currentHostName=$(uci get system.@system[0].hostname)
 if [ $nullHostName == $currentHostName ]; then
@@ -11,4 +11,6 @@ if [ $nullHostName == $currentHostName ]; then
 	$(uci set system.@system[0].hostname=$hostname)
 	$(uci commit)
 	$(/etc/init.d/system restart)
+	sleep 1
+	$(/etc/init.d/avahi-daemon restart)
 fi
