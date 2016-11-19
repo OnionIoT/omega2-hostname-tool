@@ -13,4 +13,5 @@ if [ $nullHostName == $currentHostName ]; then
 	$(/etc/init.d/system restart)
 	sleep 1
 	$(/etc/init.d/avahi-daemon restart)
+	$(wifi)
 fi
