@@ -1,12 +1,32 @@
 #!/bin/sh
 
+# include the Onion sh lib
+. /usr/lib/onion/lib.sh
 
 nullHostName="Omega-0000"
 currentHostName=$(uci get system.@system[0].hostname)
 if [ "$nullHostName" == "$currentHostName" ]; then
-	sleep 5
-	m1=$(cat /sys/class/net/ra0/address | awk -F ':' '{print $5}' | awk '{print toupper($0)}')
-	m2=$(cat /sys/class/net/ra0/address | awk -F ':' '{print $6}' | awk '{print toupper($0)}')
+	macaddr=""
+	count=0
+	while [ $count -lt 5 ];
+	do
+		ubusNetwork=$(ubus call network.device status)
+		json_load "$ubusNetwork"
+		json_select "ra0"
+		json_get_var macaddr "macaddr"
+		#echo "count is $count, macaddr is $macaddr" > /tmp/updateHostname
+
+		if [ "$macaddr" == "" ]; then
+			sleep 5
+			count=$(($count+1))
+		else
+			count=99
+		fi
+	done
+
+	m1=$(echo $macaddr | awk -F ':' '{print $5}' | awk '{print toupper($0)}')
+	m2=$(echo $macaddr | awk -F ':' '{print $6}' | awk '{print toupper($0)}')
+
 	hostname="Omega-$m1$m2"
 	$(uci set wireless.@wifi-iface[0].ssid=$hostname)
 	$(uci set system.@system[0].hostname=$hostname)
