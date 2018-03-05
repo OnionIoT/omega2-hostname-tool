@@ -6,7 +6,7 @@
 nullHostName="-0000"
 currentHostName=$(uci get system.@system[0].hostname)
 
-hostnameIsNull=$(echo "$currentHostName" | grep "$nullHostname\$")
+hostnameIsNull=$(echo "$currentHostName" | grep -e "$nullHostName\$")
 
 if [ "$hostnameIsNull" != "" ]; then
 	rootHostName=$(echo "$currentHostName" | sed -e "s/$nullHostName//")
