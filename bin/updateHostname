@@ -3,9 +3,13 @@
 # include the Onion sh lib
 . /usr/lib/onion/lib.sh
 
-nullHostName="Omega-0000"
+nullHostName="-0000"
 currentHostName=$(uci get system.@system[0].hostname)
-if [ "$nullHostName" == "$currentHostName" ]; then
+
+hostnameIsNull=$(echo "$currentHostName" | grep "$nullHostname\$")
+
+if [ "$hostnameIsNull" != "" ]; then
+	rootHostName=$(echo "$currentHostName" | sed -e "s/$nullHostName//")
 	macaddr=""
 	count=0
 	while [ $count -lt 5 ];
@@ -27,7 +31,7 @@ if [ "$nullHostName" == "$currentHostName" ]; then
 	m1=$(echo $macaddr | awk -F ':' '{print $5}' | awk '{print toupper($0)}')
 	m2=$(echo $macaddr | awk -F ':' '{print $6}' | awk '{print toupper($0)}')
 
-	hostname="Omega-$m1$m2"
+	hostname="$rootHostName-$m1$m2"
 	$(uci set wireless.@wifi-iface[0].ssid=$hostname)
 	$(uci set system.@system[0].hostname=$hostname)
 	$(uci commit)
