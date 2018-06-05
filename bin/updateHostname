@@ -34,6 +34,7 @@ if [ "$hostnameIsNull" != "" ]; then
 	hostname="$rootHostName-$m1$m2"
 	$(uci set wireless.@wifi-iface[0].ssid=$hostname)
 	$(uci set system.@system[0].hostname=$hostname)
+	$(uci set network.wwan.hostname=$hostname)
 	$(uci commit)
 	$(/etc/init.d/system restart)
 	sleep 1
