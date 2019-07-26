@@ -8,8 +8,10 @@ currentHostName=$(uci get system.@system[0].hostname)
 
 hostnameIsNull=$(echo "$currentHostName" | grep -e "$nullHostName\$")
 
-if [ "$hostnameIsNull" != "" ]; then
-	rootHostName=$(echo "$currentHostName" | sed -e "s/$nullHostName//")
+if [ "$hostnameIsNull" != "" ] || 
+   [ "$1" == "-f" ];
+then
+	rootHostName=$(echo "$currentHostName" | sed -e 's/-....$//')
 	macaddr=""
 	count=0
 	while [ $count -lt 5 ];
