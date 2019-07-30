@@ -32,6 +32,11 @@ then
 
 	m1=$(echo $macaddr | awk -F ':' '{print $5}' | awk '{print toupper($0)}')
 	m2=$(echo $macaddr | awk -F ':' '{print $6}' | awk '{print toupper($0)}')
+	
+	# do nothing if mac address ends with 0000
+	if [ "$m1$m2" == "0000" ]; then
+            exit 0
+	fi
 
 	hostname="$rootHostName-$m1$m2"
 	$(uci set wireless.@wifi-iface[0].ssid=$hostname)
