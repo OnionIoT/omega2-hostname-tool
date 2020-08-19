@@ -39,9 +39,15 @@ then
 	fi
 
 	hostname="$rootHostName-$m1$m2"
-	$(uci set wireless.@wifi-iface[0].ssid=$hostname)
 	$(uci set system.@system[0].hostname=$hostname)
 	$(uci set network.wwan.hostname=$hostname)
+
+	ssid=$(uci get wireless.@wifi-iface[0].ssid)
+	if echo "$ssid" | grep -qe "$nullHostName\$"; then
+		rootSsid=$(echo "$ssid" | sed -e 's/-....$//')
+		$(uci set wireless.@wifi-iface[0].ssid=$rootSsid-$m1$m2)
+	fi
+
 	$(uci commit)
 	$(/etc/init.d/system restart)
 	sleep 1
